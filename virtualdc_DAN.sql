@@ -15,7 +15,7 @@ INSERT INTO cadfun VALUES (2,'WILSON DE MACEDO', '03', 'PROGRAMADOR',1050.00);
 INSERT INTO cadfun VALUES (15,'MARCELO HENRIQUE', '02', 'GERENTE', 1985.75);
 INSERT INTO cadfun VALUES (7, 'APARECIDA SILVA', '03', 'SECRETARIA',1200.50);
 INSERT INTO cadfun VALUES (9,'SOLANGE PACHECO', '05', 'SUPERVISORA',1599.51);
-INSERT INTO cadfun VALUES (6,'MARCELO SOUZA', '03', 'ANALISTA', 2250.11);
+INSERT INTO cadfun (CODFUN,NOME,DEPTO,FUNCAO,SALARIO) VALUES (6,'MARCELO SOUZA', '03', 'ANALISTA',2250.11);
 INSERT INTO cadfun VALUES (1, 'CELIA NASCIMENTO', '02', 'SECRETARIA', 1200.50);
 INSERT INTO cadfun VALUES (5,'AUGUSTO SOUZA','03','PROGRAMADOR',1050.00);
 INSERT INTO cadfun VALUES (4,'CARLOS BASTOS','05','VENDEDOR',1530.00);
@@ -116,6 +116,104 @@ SELECT * FROM cadfun WHERE DEPTO = (SELECT DEPTO FROM ARQUIVOMORTO WHERE CODFUN 
 /* G */ SELECT NOME, FUNCAO FROM cadfun ORDER BY FUNCAO DESC;
 /* H */ SELECT NOME, FUNCAO FROM cadfun ORDER BY FUNCAO, NOME DESC; 
 /* I */ SELECT * FROM cadfun WHERE MONTH(ADMISSAO) = 10;
+
+
+/* 11/08//2022*/
+
+/* Consulta com operadores aritméticos */
+SELECT NOME,SALARIO + 100 FROM cadfun;
+/* Mostrar nome e salario com 20% no valor do salario do funcionario */
+SELECT NOME,SALARIO * 1.20 FROM cadfun;
+
+/* Consulta com operadores relacionais */
+SELECT * FROM cadfun WHERE DEPTO = '05';
+SELECT * FROM cadfun WHERE FUNCAO = 'VENDEDOR';
+SELECT * FROM cadfun WHERE SALARIO <= 1700;
+
+/* Consulta com operadores lógicos */
+SELECT * FROM cadfun WHERE NOT(FUNCAO = 'VENDEDOR');
+
+/* Consuta com operadores auxiliares */
+ALTER TABLE cadfun ADD FILHOS SMALLINT;
+ALTER TABLE ARQUIVOMORTO ADD FILHOS SMALLINT;
+SELECT NOME,FILHOS FROM cadfun;
+SELECT NOME,FILHOS FROM ARQUIVOMORTO;
+
+/* Incluindo informações de filhos na tabela cadfun */
+UPDATE cadfun SET FILHOS = 1 WHERE CODFUN = 2;
+UPDATE cadfun SET FILHOS = 3 WHERE CODFUN = 3;
+UPDATE cadfun SET FILHOS = 2 WHERE CODFUN = 5;
+UPDATE cadfun SET FILHOS = 1 WHERE CODFUN = 9;
+UPDATE cadfun SET FILHOS = 4 WHERE CODFUN = 20;
+UPDATE cadfun SET FILHOS = 3 WHERE CODFUN = 25;
+
+/* Operador IS NULL */
+SELECT CODFUN, NOME, FILHOS FROM cadfun WHERE FILHOS IS NULL;
+SELECT CODFUN, NOME, FILHOS FROM cadfun WHERE NOT FILHOS IS NULL;
+
+/* Operador BETWEEN */
+SELECT NOME,SALARIO, FILHOS FROM cadfun WHERE SALARIO BETWEEN 1700 AND 2000;
+
+/* Operador IN */
+SELECT NOME,DEPTO FROM cadfun WHERE DEPTO IN ('02','03') ORDER BY DEPTO;
+
+/* Operador LIKE */
+SELECT * FROM cadfun WHERE SALARIO LIKE '11%'; -- Mostrar tudo onde salario que comece com 11
+SELECT * FROM cadfun WHERE SALARIO LIKE '%8%'; -- Mostrar tudo onde salario que tenha 8 no meio
+SELECT * FROM cadfun WHERE SALARIO LIKE '_1%'; -- Mostrar tudo onde salario que segundo lugar seja 1
+SELECT * FROM cadfun WHERE SALARIO LIKE '%6';  -- Mostrar tudo onde salario termine com 6
+SELECT * FROM cadfun WHERE SALARIO LIKE '_6%0';-- Mostrar tudo onde salario tenha 6 no segundo lugar e termine com 0
+SELECT * FROM cadfun WHERE NOME LIKE 'A%';     -- Mostrar tudo onde nome comece com A
+SELECT * FROM cadfun WHERE NOME LIKE '_A%';    -- Mostrar tudo onde nome tenha segundo lugar seja A
+SELECT * FROM cadfun WHERE NOME LIKE '%AN%';   -- Mostrar tudo onde nome tenha 'AN' no meio
+SELECT * FROM cadfun WHERE NOME NOT LIKE '%AN%';-- Mostrar tudo onde nome não tenha 'AN' no meio
+
+/*A*/ SELECT CODFUN,NOME,SALARIO + 250 AS RESULTADO FROM cadfun;
+/*B*/ SELECT CODFUN,NOME,SALARIO AS RESULTADO FROM cadfun;
+/*C*/ SELECT * FROM cadfun WHERE FUNCAO = 'ANALISTA';
+/*D*/ SELECT * FROM cadfun WHERE SALARIO >= 1700;
+/*E*/ SELECT * FROM cadfun WHERE SALARIO > 1700;
+/*F*/ SELECT * FROM cadfun WHERE SALARIO < 1700;
+/*G*/ SELECT * FROM cadfun WHERE SALARIO = 1700;
+/*H*/ SELECT * FROM cadfun WHERE FUNCAO IN ('PROGRAMADOR','ANALISTA');
+/*I*/ SELECT * FROM cadfun WHERE FUNCAO IN ('PROGRAMADOR','ANALISTA') AND SALARIO > 1200 ;
+/*J*/ SELECT * FROM cadfun WHERE FUNCAO NOT IN ('PROGRAMADOR','ANALISTA');
+/*K*/ SELECT * FROM cadfun WHERE FILHOS BETWEEN 2 AND 4 ORDER BY FILHOS;
+/*L*/ SELECT * FROM cadfun WHERE FILHOS BETWEEN 2 AND 4 AND SALARIO < 2000 ORDER BY FILHOS;
+/*M*/ SELECT * FROM cadfun WHERE ( FILHOS < 2) OR (FILHOS > 3) OR FILHOS IS NULL;
+/*N*/ SELECT * FROM cadfun WHERE (FILHOS < 2) OR (FILHOS > 3);
+/*O*/ SELECT * FROM cadfun WHERE FILHOS IN ('2','3');
+/*P*/ SELECT * FROM cadfun WHERE NOME LIKE '%SILVA%';
+/*Q*/ SELECT * FROM cadfun WHERE NOME LIKE 'SILV%';
+/*R*/ SELECT NOME FROM cadfun WHERE NOME LIKE '%SILVA%';
+	  SELECT SUBSTRING(NOME,1,CHARINDEX(' ',NOME,1)-1) FROM cadfun WHERE NOME LIKE '%SILVA%'; -- PAE É ZIKA :P
+/*S*/ SELECT NOME,DEPTO FROM cadfun WHERE FUNCAO IN ('GERENTE','ANALISTA');
+/*T*/ SELECT CODFUN,NOME,DEPTO FROM cadfun WHERE CODFUN IN('2','5','9') ORDER BY CODFUN DESC;
+/*U*/ SELECT NOME, DEPTO FROM cadfun WHERE DEPTO = '05';
+/*V*/ SELECT * FROM cadfun WHERE NOME LIKE '%SILVA%' ORDER BY NOME;
+/*W*/ SELECT * FROM cadfun WHERE SALARIO != 2000;
+                                                                  -- ATIVIDADE 03 --
+
+
+/*A*/ SELECT AVG(FILHOS) AS filhosMedia FROM cadfun;
+/*B*/ SELECT AVG(FILHOS) AS filhosMedia FROM cadfun WHERE DEPTO = '05';
+/*C*/ SELECT AVG(DISTINCT SALARIO) AS salarioMedia FROM cadfun WHERE DEPTO = '05';
+/*D*/ SELECT COUNT(CODFUN) AS TOTALFUN FROM cadfun WHERE DEPTO = '05';
+/*E*/ SELECT MAX(SALARIO) AS MAXSAL FROM cadfun WHERE DEPTO = '05';
+/*F*/ SELECT NOME FROM cadfun WHERE SALARIO = (SELECT MAX(SALARIO) FROM cadfun WHERE DEPTO = '05'); 
+/*G*/ 
+/*H*/ 
+/*I*/ 
+/*J*/ 
+/*K*/ 
+/*L*/ 
+/*M*/ 
+/*N*/ 
+/*O*/ 
+/*P*/ 
+/*Q*/ 
+/*R*/
+
 
 
 
